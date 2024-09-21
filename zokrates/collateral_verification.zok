@@ -1,0 +1,37 @@
+// def main(private field collateral, field minCollateral) -> (bool):
+//   // Ensure that minCollateral <= collateral
+//   bool isValid = minCollateral <= collateral;
+//   // Enforce that isValid is true
+//   assert(isValid == true);
+//   return true;
+
+// Function to convert a field element to a 128-bit unsigned integer
+def to_bits128(field x) -> (u8[16]):
+    u8[16] bits = [0u8; 16];
+    field temp = x;
+    for u32 i in 0..16 {
+        bits[15 - i] = (temp % 256) as u8;
+        temp = temp / 256;
+    }
+    return bits;
+
+// Function to compare two 128-bit unsigned integers
+def field a <= field b -> (bool):
+    u8[16] a_bits = to_bits128(a);
+    u8[16] b_bits = to_bits128(b);
+
+    for u32 i in 0..16 {
+        if a_bits[i] < b_bits[i] {
+            return true;
+        } else if a_bits[i] > b_bits[i] {
+            return false;
+        }
+    }
+    return true; // They are equal
+
+def main(private field collateral, field minCollateral) -> (bool):
+    // Ensure that minCollateral <= collateral
+    bool isValid = minCollateral <= collateral;
+    // Enforce that isValid is true
+    assert(isValid);
+    return true;
